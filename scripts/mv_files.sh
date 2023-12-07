@@ -7,8 +7,24 @@ function show_progress() {
     echo -ne "移动进度: $current/$total ($percentage%)\r"
 }
 
-SOURCE=/path/to/source
-TARGET=/pathg/to/target
+SOURCE=/path/to/source/
+TARGET=/path/to/target/
+
+if [ ! -d "$SOURCE" ]; then
+    echo "源目录不存在: $SOURCE"
+    exit 1
+fi
+
+if [ ! -d "$TARGET" ]; then
+    echo "目标目录不存在: $TARGET"
+    exit 1
+fi
+
+read -p "是否覆盖已存在的文件? (y/n): " overwrite
+if [[ ! $overwrite =~ ^[YyNn]$ ]]; then
+    echo "无效的输入，退出脚本。"
+    exit 1
+fi
 
 total_files=$(find $SOURCE -type f | wc -l)
 count=0
@@ -19,7 +35,12 @@ find $SOURCE -type f -print0 | while IFS= read -r -d '' file; do
     mkdir -p "$target_dir"
 
     if [ -f "$target_file" ]; then
-        echo "文件已存在: $target_file"
+        if [[ $overwrite =~ ^[Yy]$ ]]; then
+            mv -f "$file" "$target_file"
+            count=$((count+1))
+        else
+            echo "文件已存在，跳过: $target_file"
+        fi
     else
         mv -f "$file" "$target_file"
         count=$((count+1))
