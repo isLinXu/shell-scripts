@@ -1,14 +1,14 @@
 #!/bin/bash
 
+SOURCE=/youtu-reid/gatilin/datasets/kaggle
+TARGET=/svap_storage/gatilin/datasets/kaggle
+
 function show_progress() {
     current=$1
     total=$2
     percentage=$(awk "BEGIN { pc=100*${current}/${total}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
     echo -ne "复制进度: $current/$total ($percentage%)\r"
 }
-
-SOURCE=/youtu-reid/gatilin/datasets/kaggle
-TARGET=/svap_storage/gatilin/datasets/kaggle
 
 if [ ! -d "$SOURCE" ]; then
     echo "源目录不存在: $SOURCE"

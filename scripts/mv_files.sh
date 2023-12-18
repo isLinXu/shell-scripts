@@ -1,14 +1,15 @@
 #!/bin/bash
 
+
+SOURCE=/path/to/source/
+TARGET=/path/to/target/
+
 function show_progress() {
     current=$1
     total=$2
     percentage=$(awk "BEGIN { pc=100*${current}/${total}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
     echo -ne "移动进度: $current/$total ($percentage%)\r"
 }
-
-SOURCE=/path/to/source/
-TARGET=/path/to/target/
 
 if [ ! -d "$SOURCE" ]; then
     echo "源目录不存在: $SOURCE"
